@@ -66,8 +66,10 @@ function alterarContexto(contexto){
     botoes.forEach(function (contexto){
         contexto.classList.remove('active')
     })
+
     html.setAttribute('data-contexto', contexto);
     banner.setAttribute('src', `/imagens/${contexto}.png`)
+
     switch (contexto) {
         case "foco":
             // InnerHTML permite utilizar caracteristicas do html (Strong e etc)
@@ -91,8 +93,13 @@ const contagemRegressiva = () => {
     // Aqui se encontra a condição e o som de quando o tempo for finalizado
     if(tempoDecorridoEmSegundos <= 0){
         audioTempoFinalizado.play();
-        zerar();
         alert('Tempo finalizado!')
+        const focoAtivo = html.getAttribute('data-contexto') == 'foco'
+        if(focoAtivo){
+            const evento = new CustomEvent('focoFinalizado')
+            document.dispatchEvent(evento)
+        }
+        zerar();
         return;
     }
     tempoDecorridoEmSegundos -= 1;
